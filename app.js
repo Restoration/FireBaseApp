@@ -1,8 +1,14 @@
+const functions = require('firebase-functions');
+const admin = require("firebase-admin");
+const serviceAccount = require("./serviceAccount.json");
+const data = require('./functions.json');
+const databaseUrl = data.database.url;
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -37,6 +43,26 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+
+
+
+
+
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount)
+});
+
+var db = admin.firestore();
+
+db.collection('users').get()
+    .then((snapshot) => {
+      snapshot.forEach((doc) => {
+        console.log(doc.id, '=>', doc.data());
+      });
+    })
+    .catch((err) => {
+      console.log('Error getting documents', err);
+    });
 
 app.listen(3000, () => console.log('Example app listening on port 3000!'))
 
