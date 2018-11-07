@@ -63,3 +63,12 @@ node_modules/
 
 # dotenv environment variables file
 .env
+
+# Secret key of Database
+serviceAccount.json
+
+# local environment file
+functions.json
+
+# package-lock.json
+package-lock.json
